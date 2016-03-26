@@ -2,41 +2,6 @@
 
 var anprApp = angular.module('anprApp',['ui.router','ngResource','ui.bootstrap','ngCookies', 'anprInterceptor']);
 
-anprApp.config(function($stateProvider,$urlRouterProvider, $logProvider, $browserProvider, $httpProvider){
-
-	$urlRouterProvider.otherwise('/host');
-
-	$stateProvider
-	.state('empty',{
-		url:"/host/",
-		templateUrl:"templates/empty.html",
-		controller: function($state,$rootScope){
-			$state.transitionTo('login');
-		}
-	})
-	.state('empty_root',{
-		url:"/host/",
-		templateUrl:"templates/empty.html",
-		controller: function($state,$rootScope){
-			$state.transitionTo('login');
-		}
-	})
-	.state('login',{
-		url:"/login",
-		templateUrl : "templates/login.html",
-		controller : "loginCntrl",
-		data : {publicAccess:true}
-	})
-	.state('enrollment',{
-		url:"/enrollment",
-		templateUrl : "templates/enrollment.html",
-		controller : "enrollmentCntrl"
-	});
-
-	$logProvider.debugEnabled(true);
-	$httpProvider.interceptors.push('httpAnprInterceptor');
-});
-
 anprApp.run(function($rootScope,$state,$http,$templateCache,$log,$location){
 	$rootScope.$log = $log;
 	$rootScope.$log.debug("Application Started");
