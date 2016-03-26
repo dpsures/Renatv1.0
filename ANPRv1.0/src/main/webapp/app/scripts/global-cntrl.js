@@ -1,15 +1,28 @@
 'use strict';
 
-anprApp.controller('globalCntrl',function($scope,$rootScope){
+anprApp.controller('globalCntrl',['$scope','$rootScope','$state','userService',
+                                  function($scope,$rootScope,$state,userService){
 	$scope.title = " ANPR v1.0";
 	$rootScope.$log.debug($scope.title);
-});
-
-anprApp.controller('loginCntrl',['$scope','$rootScope','userService',function($scope,$rootScope,userService){
-	$rootScope.$log.debug("loginCntrl invoked");
 	
-	$scope.login = function(){
-		$rootScope.$log.debug("login function invoked");
-		userService.validateUser($scope,$rootScope);		
-	};
+	$rootScope.$on("idelRestart",function(){
+		$rootScope.$log.debug("idelRestart $on called");
+	});
+
+	$rootScope.$on("validateUser",function(e, userDetails){
+		$rootScope.$log.debug("user name ---> "+userDetails.userName+" --- password ---> "+userDetails.password);
+		userService.validateUser($scope,$rootScope,userDetails,userService);
+	});
+	
+	$scope.$watch("status",function(){
+		
+		if($scope.status == ""){
+			return;
+		}
+		
+		if($scope.message == "loginService"){
+			$state.transitionTo('enrollment');
+		}
+	});
 }]);
+
